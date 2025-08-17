@@ -2,8 +2,8 @@ name: Deploy React to S3 + CloudFront
 
 on:
   push:
-    branches: [main] 
-  workflow_dispatch: 
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -41,6 +41,16 @@ jobs:
         env:
           CI: "false"
         run: npm run build
+
+      - name: Debug OIDC inputs
+        run: |
+          echo "repo=${{ github.repository }}"
+          echo "ref=${{ github.ref }}"
+          echo "aws-region=${{ env.AWS_REGION }}"
+          echo "s3-bucket=${{ env.S3_BUCKET }}"
+          echo "cloudfront-distribution-id=${{ env.CLOUDFRONT_DISTRIBUTION_ID }}"
+          echo "deployer-role=${{ env.DEPLOYER_ROLE }}"
+          echo "build-dir=${{ env.BUILD_DIR }}"
 
       - name: Configure AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
